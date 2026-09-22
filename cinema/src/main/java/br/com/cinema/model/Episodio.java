@@ -8,6 +8,13 @@ public class Episodio {
     private Double avaliacaoEpisodio;
     private LocalDate dataLancamento;
 
+public Episodio (Integer numeroTemporadas, DadosEpisodio dadosEpisodio) {
+    this.temporadas = numeroTemporadas;
+    this.titulo = dadosEpisodio.Title();
+    this.numeroEpisodio = dadosEpisodio.numeroEps();
+    this.avaliacaoEpisodio = Double.valueOf(dadosEpisodio.avaliacaoImdb());
+    this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
+}
 
     public void setTitulo(String titulo) {this.titulo = titulo;}
     public void setTemporadas(Integer temporadas) {this.temporadas = temporadas;}
