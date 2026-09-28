@@ -5,21 +5,27 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class ConsumoAPI {
+    // um único client reaproveitado entre as chamadas, com tempo máximo para conectar
+    private final HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+
     public String ObterDados(String url) {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
-        HttpResponse<String> response = null; // resposta da requisição
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .timeout(Duration.ofSeconds(60)) // sem isso a requisição pode esperar para sempre
+                .build();
         try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body(); // corpo da resposta
         } catch (IOException e) {
             System.out.println("Erro ao consumir a API: " + e.getMessage());
         } catch (InterruptedException e) {
             System.out.println("Erro ao consumir a API: " + e.getMessage());
         }
-        String json = response.body(); // corpo da resposta
-        return json;
+        return null;
     }
 }
-

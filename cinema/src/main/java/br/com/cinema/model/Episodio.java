@@ -1,5 +1,7 @@
 package br.com.cinema.model;
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class Episodio {
     private String titulo;
@@ -12,9 +14,18 @@ public Episodio (Integer numeroTemporadas, DadosEpisodio dadosEpisodio) {
     this.temporadas = numeroTemporadas;
     this.titulo = dadosEpisodio.Title();
     this.numeroEpisodio = dadosEpisodio.numeroEps();
+    try {
     this.avaliacaoEpisodio = Double.valueOf(dadosEpisodio.avaliacaoImdb());
-    this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
+    } catch (NumberFormatException e) {
+        this.avaliacaoEpisodio = 0.0;
+    }
+    try {
+        this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
+    } catch (DateTimeParseException exception) {
+        this.dataLancamento = null;
+    }
 }
+
 
     public void setTitulo(String titulo) {this.titulo = titulo;}
     public void setTemporadas(Integer temporadas) {this.temporadas = temporadas;}
@@ -28,4 +39,15 @@ public Episodio (Integer numeroTemporadas, DadosEpisodio dadosEpisodio) {
     public Integer getNumeroEpisodio() {return numeroEpisodio;}
     public Double getAvaliacaoEpisodio() {return avaliacaoEpisodio;}
     public LocalDate getDataLancamento() {return dataLancamento;}
+
+
+    @Override
+    public String toString() {
+        return "titulo='" + titulo + '\'' +
+                ", temporadas=" + temporadas +
+                ", numeroEpisodio=" + numeroEpisodio +
+                ", avaliacaoEpisodio=" + avaliacaoEpisodio +
+                ", dataLancamento=" + dataLancamento;
+    }
 }
+
