@@ -1,6 +1,7 @@
 package br.com.cinema.model;
-import java.time.DateTimeException;
+
 import java.time.LocalDate;
+import java.time.DateTimeException;
 import java.time.format.DateTimeParseException;
 
 public class Episodio {

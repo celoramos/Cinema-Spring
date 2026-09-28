@@ -1,4 +1,5 @@
 package br.com.cinema.model;
+
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
