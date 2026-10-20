@@ -1,9 +1,13 @@
 package br.com.cinema.principal;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import br.com.cinema.model.DadosSerie;
+import br.com.cinema.model.Serie;
 import br.com.cinema.services.ConsumoAPI;
 import br.com.cinema.model.DadosTemporada;
 import br.com.cinema.services.ConverterDados;
@@ -21,10 +25,8 @@ public class Principal {
         while (opcao != 0) {
             var menu = """
                     1 - Buscar séries
-                    2 - Buscar episódios
-                    3 - Buscar filmes
-                    4 - Listar séries buscadas
-
+                    2 - Buscar filmes
+                    3 - Listar séries buscadas
                     0 - Sair
                     """;
 
@@ -34,30 +36,29 @@ public class Principal {
 
             switch (opcao) {
                 case 1:
-                    buscarSerieWeb();
+                    DadosSerie serieBuscada = buscarSerieWeb();
+                    System.out.println("Deseja buscar episódios dessa série? (Sim/Não)");
+                    String resposta = scanner.nextLine();
+                    if (resposta.equalsIgnoreCase("Sim")) {
+                        buscarEpisodioPorSerie(serieBuscada);
+                    }
                     break;
-                case 2:
-                    buscarEpisodioPorSerie();
+                case 2: buscarFilmeWeb();
                     break;
-                case 3:
-                    buscarFilmeWeb();
+                case 3: listarSeriesBuscadas();;
                     break;
-                case 4:
-                    listarSeriesBuscadas();
+                case 0: System.out.println("Saindo...");
                     break;
-                case 0:
-                    System.out.println("Saindo...");
-                    break;
-                default:
-                    System.out.println("Opção inválida");
+                default: System.out.println("Opção inválida");
             }
         }
     }
 
-    private void buscarSerieWeb() {
+    private DadosSerie buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
         dadosSeries.add(dados);
         System.out.println(dados);
+        return dados;
     }
 
     private DadosSerie getDadosSerie() {
@@ -68,16 +69,15 @@ public class Principal {
         return dados;
     }
 
-    private void buscarEpisodioPorSerie() {
-        DadosSerie dadosSerie = getDadosSerie();
+    private void buscarEpisodioPorSerie(DadosSerie dadosSerie) {
         List<DadosTemporada> temporadas = new ArrayList<>();
 
         for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
             var json = consumoAPI.ObterDados(ENDERECOURL + dadosSerie.Title().replace(" ", "+") + "&season=" + i + APIKEY);
             DadosTemporada dadosTemporada = converterDados.obterDados(json, DadosTemporada.class);
             temporadas.add(dadosTemporada);
-        temporadas.forEach(System.out::println);
         }
+        temporadas.forEach(System.out::println);
     }
 
     private void buscarFilmeWeb() {
@@ -89,6 +89,12 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        dadosSeries.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                .map(Serie::new)
+                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
-}
+    }

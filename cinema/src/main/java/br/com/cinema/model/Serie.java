@@ -1,5 +1,7 @@
 package br.com.cinema.model;
 
+import br.com.cinema.services.traducao.ConsultaMyMemory;
+
 import java.util.OptionalDouble;
 
 public class Serie {
@@ -20,8 +22,18 @@ public class Serie {
         this.Genero = Categoria.fromString(dadosSerie.Genero().split(", ")[0].trim());
         this.Atores = dadosSerie.atores();
         this.Posters = dadosSerie.poster();
-        this.Sinopse = dadosSerie.sinopse();
+        this.Sinopse = ConsultaMyMemory.obterTraducao(dadosSerie.sinopse()).trim();
     }
+
+    public String getTitulo() {return Titulo;}
+    public String getAtores() {return Atores;}
+    public String getPosters() {return Posters;}
+    public String getSinopse() {return Sinopse;}
+    public Integer getSeason() {return Season;}
+    public String getReleased() {return Released;}
+    public Categoria getGenero() {return Genero;}
+    public Double getImdbRating() {return imdbRating;}
+    public Integer getTotalTemporadas() {return totalTemporadas;}
 
     public void setTitulo(String titulo) {this.Titulo = titulo;}
     public void setAtores(String atores) {this.Atores = atores;}
@@ -33,14 +45,17 @@ public class Serie {
     public void setImdbRating(Double imdbRating) {this.imdbRating = imdbRating;}
     public void setTotalTemporadas(Integer totalTemporadas) {this.totalTemporadas = totalTemporadas;}
 
-
-    public String getTitulo() {return Titulo;}
-    public String getAtores() {return Atores;}
-    public String getPosters() {return Posters;}
-    public String getSinopse() {return Sinopse;}
-    public Integer getSeason() {return Season;}
-    public String getReleased() {return Released;}
-    public Enum<Categoria> getGenero() {return Genero;}
-    public Double getImdbRating() {return imdbRating;}
-    public Integer getTotalTemporadas() {return totalTemporadas;}
+    
+    @Override
+    public String toString() {
+        return "Titulo='" + Titulo + '\'' +
+                ", Atores='" + Atores + '\'' +
+                ", Posters='" + Posters + '\'' +
+                ", Sinopse='" + Sinopse + '\'' +
+                ", Season=" + Season +
+                ", Released='" + Released + '\'' +
+                ", Genero=" + Genero +
+                ", imdbRating=" + imdbRating +
+                ", totalTemporadas=" + totalTemporadas;
+    }
 }
