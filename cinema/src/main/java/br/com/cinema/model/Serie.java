@@ -1,8 +1,7 @@
 package br.com.cinema.model;
 
-import br.com.cinema.services.traducao.ConsultaMyMemory;
-
 import java.util.OptionalDouble;
+import br.com.cinema.services.traducao.ConsultaMyMemory;
 
 public class Serie {
     private String Titulo;
