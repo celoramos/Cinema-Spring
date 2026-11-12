@@ -1,13 +1,13 @@
 package br.com.cinema.principal;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
-import br.com.cinema.model.DadosSerie;
 import br.com.cinema.model.Serie;
+import br.com.cinema.model.DadosSerie;
 import br.com.cinema.services.ConsumoAPI;
 import br.com.cinema.model.DadosTemporada;
 import br.com.cinema.services.ConverterDados;
