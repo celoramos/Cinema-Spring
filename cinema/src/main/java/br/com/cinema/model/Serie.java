@@ -34,6 +34,7 @@ public class Serie {
     public Double getImdbRating() {return imdbRating;}
     public Integer getTotalTemporadas() {return totalTemporadas;}
 
+
     public void setTitulo(String titulo) {this.Titulo = titulo;}
     public void setAtores(String atores) {this.Atores = atores;}
     public void setPosters(String posters) {this.Posters = posters;}

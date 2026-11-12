@@ -8,7 +8,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ConsumoAPI {
-    // um único client reaproveitado entre as chamadas, com tempo máximo para conectar
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .build();
@@ -16,11 +15,11 @@ public class ConsumoAPI {
     public String ObterDados(String url) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .timeout(Duration.ofSeconds(60)) // sem isso a requisição pode esperar para sempre
+                .timeout(Duration.ofSeconds(60))
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.body(); // corpo da resposta
+            return response.body();
         } catch (IOException e) {
             System.out.println("Erro ao consumir a API: " + e.getMessage());
         } catch (InterruptedException e) {

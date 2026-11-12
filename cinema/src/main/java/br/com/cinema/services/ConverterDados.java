@@ -9,7 +9,7 @@ public class ConverterDados implements IConverteDados {
     @Override
     public <T> T obterDados(String json, Class<T> classe) {
         try {
-            return mapper.readValue(json, classe); // transforma em objeto Java
+            return mapper.readValue(json, classe);
         } catch (Exception e) {
             System.out.println("Erro ao converter os dados: " + e.getMessage());
             return null;
