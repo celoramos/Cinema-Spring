@@ -5,20 +5,24 @@ public enum Categoria {
     ROMANCE("Romance"),
     COMEDIA("Comedy"),
     DRAMA("Drama"),
-    TERROR("Horror");
+    TERROR("Horror"),
+    OUTROS("Other");
 
-    private String categoriaOMDB;
+    private final String categoriaOMDB;
 
     Categoria(String categoriaOMDB) {
         this.categoriaOMDB = categoriaOMDB;
     }
 
     public static Categoria fromString(String text) {
+        if (text == null || text.isBlank()) {
+            return OUTROS;
+        }
         for (Categoria categoria : Categoria.values()) {
             if (categoria.categoriaOMDB.equalsIgnoreCase(text)) {
                 return categoria;
             }
         }
-        throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida: " + text);
+        return OUTROS;
     }
 }

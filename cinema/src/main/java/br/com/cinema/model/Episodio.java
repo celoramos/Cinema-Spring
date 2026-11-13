@@ -1,7 +1,6 @@
 package br.com.cinema.model;
 
 import java.time.LocalDate;
-import java.time.DateTimeException;
 import java.time.format.DateTimeParseException;
 
 public class Episodio {
@@ -16,14 +15,20 @@ public Episodio (Integer numeroTemporadas, DadosEpisodio dadosEpisodio) {
     this.titulo = dadosEpisodio.Title();
     this.numeroEpisodio = dadosEpisodio.numeroEps();
     try {
-    this.avaliacaoEpisodio = Double.valueOf(dadosEpisodio.avaliacaoImdb());
+        String avaliacao = dadosEpisodio.avaliacaoImdb();
+        this.avaliacaoEpisodio = avaliacao == null || avaliacao.isBlank()
+                ? 0.0
+                : Double.valueOf(avaliacao);
     } catch (NumberFormatException e) {
         this.avaliacaoEpisodio = 0.0;
     }
-    try {
-        this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
-    } catch (DateTimeParseException exception) {
-        this.dataLancamento = null;
+    String dataLancamento = dadosEpisodio.dataLancamento();
+    if (dataLancamento != null && !dataLancamento.isBlank()) {
+        try {
+            this.dataLancamento = LocalDate.parse(dataLancamento);
+        } catch (DateTimeParseException exception) {
+            this.dataLancamento = null;
+        }
     }
 }
 
@@ -51,4 +56,3 @@ public Episodio (Integer numeroTemporadas, DadosEpisodio dadosEpisodio) {
                 ", dataLancamento=" + dataLancamento;
     }
 }
-

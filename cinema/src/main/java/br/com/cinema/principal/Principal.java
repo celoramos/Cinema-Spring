@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import br.com.cinema.model.Serie;
@@ -62,7 +64,14 @@ public class Principal {
     }
 
     private DadosSerie buscarSerieWeb() {
-        DadosSerie dados = getDadosSerie();
+        System.out.println("Digite o nome da série para busca");
+        String nomeSerie = scanner.nextLine().trim();
+        if (nomeSerie.isEmpty()) {
+            System.out.println("O nome da série não pode ficar vazio.");
+            return null;
+        }
+
+        DadosSerie dados = getDadosSerie(nomeSerie);
         if (dados == null || dados.Title() == null) {
             System.out.println("Série não encontrada ou não foi possível consultar a API.");
             return null;
@@ -72,10 +81,8 @@ public class Principal {
         return dados;
     }
 
-    private DadosSerie getDadosSerie() {
-        System.out.println("Digite o nome da série para busca");
-        var nomeSerie = scanner.nextLine();
-        var json = consumoAPI.ObterDados(ENDERECOURL + nomeSerie.replace(" ", "+") + APIKEY);
+    private DadosSerie getDadosSerie(String nomeSerie) {
+        var json = consumoAPI.ObterDados(ENDERECOURL + codificarParametro(nomeSerie) + APIKEY);
         return converterDados.obterDados(json, DadosSerie.class);
     }
 
@@ -83,7 +90,7 @@ public class Principal {
         List<DadosTemporada> temporadas = new ArrayList<>();
 
         for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
-            var json = consumoAPI.ObterDados(ENDERECOURL + dadosSerie.Title().replace(" ", "+") + "&season=" + i + APIKEY);
+            var json = consumoAPI.ObterDados(ENDERECOURL + codificarParametro(dadosSerie.Title()) + "&season=" + i + APIKEY);
             DadosTemporada dadosTemporada = converterDados.obterDados(json, DadosTemporada.class);
             temporadas.add(dadosTemporada);
         }
@@ -92,14 +99,22 @@ public class Principal {
 
     private void buscarFilmeWeb() {
         System.out.println("Digite o nome do filme para busca:");
-        var nomeFilme = scanner.nextLine();
-        var json = consumoAPI.ObterDados(ENDERECOURL + nomeFilme.replace(" ", "+") + "&type=movie" + APIKEY);
+        var nomeFilme = scanner.nextLine().trim();
+        if (nomeFilme.isEmpty()) {
+            System.out.println("O nome do filme não pode ficar vazio.");
+            return;
+        }
+        var json = consumoAPI.ObterDados(ENDERECOURL + codificarParametro(nomeFilme) + "&type=movie" + APIKEY);
         DadosSerie dados = converterDados.obterDados(json, DadosSerie.class);
         if (dados == null || dados.Title() == null) {
             System.out.println("Filme não encontrado ou não foi possível consultar a API.");
             return;
         }
         System.out.println(dados);
+    }
+
+    private String codificarParametro(String valor) {
+        return URLEncoder.encode(valor, StandardCharsets.UTF_8);
     }
 
     private void listarSeriesBuscadas() {

@@ -1,11 +1,17 @@
 package br.com.cinema.model;
 
-import br.com.cinema.services.traducao.ConsultaMyMemory;
 import java.util.OptionalDouble;
+import br.com.cinema.services.traducao.ConsultaMyMemory;
+import jakarta.persistence.*;
 
 @Entity
-@Table (name = "serie")
+@Table(name = "series")
 public class Serie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String Titulo;
     private String Atores;
     private String Posters;
@@ -15,6 +21,9 @@ public class Serie {
     private Categoria Genero;
     private Double imdbRating;
     private Integer totalTemporadas;
+
+    public Serie() {
+    }
 
     public Serie(DadosSerie dadosSerie) {
         this.Titulo = dadosSerie.Title();
