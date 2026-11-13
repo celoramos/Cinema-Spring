@@ -1,8 +1,10 @@
 package br.com.cinema.model;
 
-import java.util.OptionalDouble;
 import br.com.cinema.services.traducao.ConsultaMyMemory;
+import java.util.OptionalDouble;
 
+@Entity
+@Table (name = "serie")
 public class Serie {
     private String Titulo;
     private String Atores;

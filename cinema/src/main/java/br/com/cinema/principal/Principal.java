@@ -31,12 +31,19 @@ public class Principal {
                     """;
 
             System.out.println(menu);
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Opção inválida");
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
                     DadosSerie serieBuscada = buscarSerieWeb();
+                    if (serieBuscada == null) {
+                        break;
+                    }
                     System.out.println("Deseja buscar episódios dessa série? (Sim/Não)");
                     String resposta = scanner.nextLine();
                     if (resposta.equalsIgnoreCase("Sim")) {
@@ -45,7 +52,7 @@ public class Principal {
                     break;
                 case 2: buscarFilmeWeb();
                     break;
-                case 3: listarSeriesBuscadas();;
+                case 3: listarSeriesBuscadas();
                     break;
                 case 0: System.out.println("Saindo...");
                     break;
@@ -56,6 +63,10 @@ public class Principal {
 
     private DadosSerie buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
+        if (dados == null || dados.Title() == null) {
+            System.out.println("Série não encontrada ou não foi possível consultar a API.");
+            return null;
+        }
         dadosSeries.add(dados);
         System.out.println(dados);
         return dados;
@@ -65,8 +76,7 @@ public class Principal {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = scanner.nextLine();
         var json = consumoAPI.ObterDados(ENDERECOURL + nomeSerie.replace(" ", "+") + APIKEY);
-        DadosSerie dados = converterDados.obterDados(json, DadosSerie.class);
-        return dados;
+        return converterDados.obterDados(json, DadosSerie.class);
     }
 
     private void buscarEpisodioPorSerie(DadosSerie dadosSerie) {
@@ -85,6 +95,10 @@ public class Principal {
         var nomeFilme = scanner.nextLine();
         var json = consumoAPI.ObterDados(ENDERECOURL + nomeFilme.replace(" ", "+") + "&type=movie" + APIKEY);
         DadosSerie dados = converterDados.obterDados(json, DadosSerie.class);
+        if (dados == null || dados.Title() == null) {
+            System.out.println("Filme não encontrado ou não foi possível consultar a API.");
+            return;
+        }
         System.out.println(dados);
     }
 
