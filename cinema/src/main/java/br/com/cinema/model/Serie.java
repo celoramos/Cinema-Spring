@@ -19,12 +19,13 @@ public class Serie {
     private String Released;
     private Double imdbRating;
     private Integer totalTemporadas;
-@Enumerated(EnumType.STRING)
     private String Atores;
     private String Sinopse;
     private String Posters;
+    @Enumerated(EnumType.STRING)
     private Categoria Genero;
 
+    @Transient
     private List<Episodio> episodios = new ArrayList<>();
     public List<Episodio> getEpisodios() {return episodios;}
     public void setEpisodios(List<Episodio> episodios) {this.episodios = episodios;}
