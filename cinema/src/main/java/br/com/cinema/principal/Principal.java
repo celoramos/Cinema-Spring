@@ -38,6 +38,15 @@ public class Principal {
                     """;
 
             System.out.println(menu);
+            if (!leitura.hasNext()) {
+                System.out.println("Entrada encerrada.");
+                break;
+            }
+            if (!leitura.hasNextInt()) {
+                System.out.println("Opção inválida");
+                leitura.nextLine();
+                continue;
+            }
             opcao = leitura.nextInt();
             leitura.nextLine();
 
