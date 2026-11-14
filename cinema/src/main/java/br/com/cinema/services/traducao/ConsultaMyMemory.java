@@ -8,6 +8,10 @@ import java.nio.charset.StandardCharsets;
 
 public class ConsultaMyMemory {
     public static String obterTraducao(String text) {
+        if (text == null || text.isBlank()) {
+            return text == null ? "" : text;
+        }
+
         ConsumoAPI consumo = new ConsumoAPI();
         ConverterDados conversor = new ConverterDados();
 
