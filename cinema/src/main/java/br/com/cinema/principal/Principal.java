@@ -10,7 +10,6 @@ import br.com.cinema.services.ConsumoAPI;
 import br.com.cinema.model.DadosTemporada;
 import br.com.cinema.services.ConverterDados;
 import br.com.cinema.repository.SerieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class Principal {
@@ -21,9 +20,11 @@ public class Principal {
     private final String API_KEY = "&apikey=6585022c";
 
 
-    @Autowired
-    private SerieRepository repositorio;
-    public Principal(SerieRepository repositorio) {this.repositorio = repositorio;}
+    private final SerieRepository repositorio;
+
+    public Principal(SerieRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
 
     public void exibeMenu() {
