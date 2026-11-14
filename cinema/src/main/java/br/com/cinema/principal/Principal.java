@@ -104,7 +104,9 @@ public class Principal {
 
     private void listarSeriesBuscadas(){
         repositorio.findAll().stream()
-                .sorted(Comparator.comparing(Serie::getGenero))
+                .sorted(Comparator.comparing(
+                        Serie::getGenero,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
                 .forEach(System.out::println);
     }
 }
