@@ -3,6 +3,9 @@ package br.com.cinema.principal;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Comparator;
+import java.util.ArrayList;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import br.com.cinema.model.Serie;
 import br.com.cinema.model.DadosSerie;
@@ -80,7 +83,8 @@ public class Principal {
     private DadosSerie getDadosSerie() {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
-        var json = consumo.ObterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
+        var tituloCodificado = URLEncoder.encode(nomeSerie, StandardCharsets.UTF_8);
+        var json = consumo.ObterDados(ENDERECO + tituloCodificado + API_KEY);
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
         return dados;
     }
@@ -88,9 +92,10 @@ public class Principal {
     private void buscarEpisodioPorSerie(){
         DadosSerie dadosSerie = getDadosSerie();
         List<DadosTemporada> temporadas = new ArrayList<>();
+        var tituloCodificado = URLEncoder.encode(dadosSerie.Title(), StandardCharsets.UTF_8);
 
         for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
-            var json = consumo.ObterDados(ENDERECO + dadosSerie.Title().replace(" ", "+") + "&season=" + i + API_KEY);
+            var json = consumo.ObterDados(ENDERECO + tituloCodificado + "&season=" + i + API_KEY);
             DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
             temporadas.add(dadosTemporada);
         }
