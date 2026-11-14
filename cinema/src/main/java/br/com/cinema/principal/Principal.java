@@ -2,9 +2,7 @@ package br.com.cinema.principal;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import br.com.cinema.model.Serie;
 import br.com.cinema.model.DadosSerie;
@@ -21,7 +19,6 @@ public class Principal {
     private ConverterDados conversor = new ConverterDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=6585022c";
-    private List<DadosSerie> dadosSeries = new ArrayList<>();
 
 
     @Autowired
@@ -91,11 +88,7 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas(){
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream()
-                .map(d -> new Serie(d))
-                .collect(Collectors.toList());
-        series.stream()
+        repositorio.findAll().stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
     }
